@@ -3,7 +3,9 @@
 module.exports = function(app) {
     app.get("/", (req, res) => {
         console.log(req);
-        
-        
+        res.render("index", {
+            msg: "Hail!"
+        }
+        )
     })
 }

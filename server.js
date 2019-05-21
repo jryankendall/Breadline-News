@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const express = require("express");
 const exphbs = require("express-handlebars");
 const app = express();
+const fs = require("fs");
+const path = require("path");
 
 const PORT = process.env.PORT || 3000;
 
@@ -16,6 +18,7 @@ app.use(express.json());
 app.use(express.static("./assets/public"));
 
 // Handlebars
+app.set("views", path.join(__dirname, "/assets/views"));
 app.engine(
     "handlebars",
     exphbs({
@@ -25,8 +28,8 @@ app.engine(
 app.set("view engine", "handlebars");
 
 //Routes
-/* require("./assets/routes/apiRoutes")(app);
-require("./assets/routes/htmlRoutes")(app); */
+/* require("./assets/routes/apiRoutes")(app); */
+require("./assets/routes/htmlRoutes")(app);
 
 
 //starting the server
