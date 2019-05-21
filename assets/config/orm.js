@@ -5,7 +5,7 @@ const orm = {
 
     addOne: function(mongoObj, cb) {
         mongoObj.save(function(err, obj) {
-            if (err) return console.log(err);
+            if (err) console.log(err);
             return cb(obj);          
         })
     }

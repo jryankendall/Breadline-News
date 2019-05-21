@@ -1,0 +1,18 @@
+<button id="testinsert">Click Here To Test Insert</button>
+
+<script type="text/javascript">
+    $("#testinsert").on("click", function(event) {
+        event.preventDefault();
+        $.ajax({
+            method: "POST",
+            url: "/developer/test/insert",
+            data: {
+                title: "ACK",
+                date: 69,
+                url: "http:whatever",
+                subtitle: "This is a test article",
+                articleBody: "Lorem ipsum yadda yadda yadda"
+            }
+        })
+    })
+</script>

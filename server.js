@@ -2,11 +2,11 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const express = require("express");
 const exphbs = require("express-handlebars");
-const app = express();
+var app = express();
 const fs = require("fs");
 const path = require("path");
 
-const PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 3000;
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
@@ -28,7 +28,7 @@ app.engine(
 app.set("view engine", "handlebars");
 
 //Routes
-/* require("./assets/routes/apiRoutes")(app); */
+require("./assets/routes/apiRoutes")(app);
 require("./assets/routes/htmlRoutes")(app);
 
 
