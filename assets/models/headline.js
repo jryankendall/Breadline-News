@@ -22,13 +22,22 @@ var testArticle = new Headline({
 
 var headlineControl = {
     all: function(cb) {
-        orm.selectAll("articles", function(result) {
+        orm.selectAll(Headline, function(result) {
             cb(result);
         })
     },
     insert: function(headlineObj, cb) {
-        orm.addOne("articles", headlineObj, function(result) {
+        var insertedArticle = new Headline({
+            title: headlineObj.title,
+            date: headlineObj.date,
+            url: headlineObj.url,
+            subtitle: headlineObj.subtitle,
+            articleBody: headlineObj.articleBody
+        });
+        orm.addOne(insertedArticle, function(result) {
             cb(result);
         })
     }
 }
+
+module.exports = headlineControl;

@@ -1,10 +1,13 @@
 const orm = {
-    selectAll: function(collection, cb) {
+    selectAll: function(mongoObj, cb) {
 
     },
 
-    addOne: function(collection, addedObj, cb) {
-
+    addOne: function(mongoObj, cb) {
+        mongoObj.save(function(err, obj) {
+            if (err) return console.log(err);
+            return cb(obj);          
+        })
     }
 }
 
