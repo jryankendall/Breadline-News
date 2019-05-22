@@ -1,5 +1,7 @@
 <button id="testinsert">Click Here To Test Insert</button>
 
+<button id="testscrape">Click to Test Scrape</button>
+
 <script type="text/javascript">
     $("#testinsert").on("click", function(event) {
         event.preventDefault();
@@ -16,6 +18,14 @@
         }).then(function(err, res) {
             if (err) console.log(err);
             console.log(res);
+        })
+    })
+
+    $("#testscrape").on("click", function(event) {
+        event.preventDefault();
+        $.ajax({
+            method: "GET",
+            url: "/developer/test/scrape"
         })
     })
 </script>

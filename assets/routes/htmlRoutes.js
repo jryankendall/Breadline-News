@@ -2,6 +2,7 @@
 require("dotenv").config();
 const axios = require("axios");
 const path = require("path");
+const newsScrape = require("./scraperRoute");
 
 const PORT = process.env.PORT || 3000;
 
@@ -24,5 +25,10 @@ module.exports = function(app) {
             data: req.body});
 
         res.send("Object added to database.");
+    })
+
+    app.get("/developer/test/scrape", (req, res) => {
+        newsScrape.pullNews();
+        res.send("Scrape Successful");
     })
 }
