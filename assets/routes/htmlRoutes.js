@@ -22,5 +22,7 @@ module.exports = function(app) {
             baseURL: "http://localhost:" + PORT,
             method: "POST", 
             data: req.body});
+
+        res.send("Object added to database.");
     })
 }

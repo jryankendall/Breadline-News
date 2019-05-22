@@ -4,9 +4,9 @@ const orm = {
     },
 
     addOne: function(mongoObj, cb) {
-        mongoObj.save(function(err, obj) {
+        mongoObj.save(function(err, response) {
             if (err) console.log(err);
-            return cb(obj);          
+            cb(response);
         })
     }
 }

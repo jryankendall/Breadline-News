@@ -15,7 +15,8 @@ module.exports = function(app) {
         console.log(data);
         var newArticle = new Headline(data.title, data.date, data.url, data.subtitle, data.articleBody);
         headlines.insert(newArticle, function(response) {
-            return console.log(response);
+            console.log(response);
+            res.status(200);
         });
     })
 }
