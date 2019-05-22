@@ -64,4 +64,4 @@ typings/
 .env
 
 #sass maps
-.map
+*.css.map
