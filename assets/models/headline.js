@@ -16,7 +16,8 @@ var testArticle = new Headline({
     date: 69,
     url: "http:whatever",
     subtitle: "This is a test article",
-    articleBody: "Lorem ipsum yadda yadda yadda"
+    articleBody: "Lorem ipsum yadda yadda yadda",
+    source: "FFffff"
 });
 
 
@@ -32,11 +33,22 @@ var headlineControl = {
             date: headlineObj.date,
             url: headlineObj.url,
             subtitle: headlineObj.subtitle,
-            articleBody: headlineObj.articleBody
+            articleBody: headlineObj.articleBody,
+            source: headlineObj.source
         });
-        orm.addOne(insertedArticle, function(result) {
-            cb(result);
-        })
+        orm.addOne(insertedArticle, result => {cb(result);})
+    },
+    comment: function(commentObj, cb) {
+        //Parse code here
+        var newComment = {
+            user: commentObj.username,
+            date: commentObj.date,
+            textbody: commentObj.textboy
+        };
+        var articleName = commentObj.article;
+
+        //At end:
+        orm.addComment(newComment, Headline, articleName, result => {cb(result)});
     }
 }
 

@@ -8,6 +8,13 @@ const orm = {
             if (err) console.log(err);
             cb(response);
         })
+    },
+
+    addComment: function(value, model, condition, cb) {
+        model.updateOne({ title: condition }, { $push: { comments: value }}, function(err, response) {
+            if (err) console.log(err);
+            cb(response);
+        });
     }
 }
 

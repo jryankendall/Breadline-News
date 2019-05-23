@@ -27,8 +27,8 @@ module.exports = function(app) {
         res.send("Object added to database.");
     })
 
-    app.get("/developer/test/scrape", (req, res) => {
-        newsScrape.pullNews();
+    app.get("/developer/test/scrape/:subject", (req, res) => {
+        newsScrape.pullOnion(req.params.subject);
         res.send("Scrape Successful");
     })
 }
