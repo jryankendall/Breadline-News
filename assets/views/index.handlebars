@@ -2,7 +2,14 @@
 <br>
 <input id="scrapetest-input">
 <button id="testscrape">Click to Test Onion Scraper</button>
+<br>
+<button id="testcomment">Click Here to Test Comment Add, then check the MongoDB</button>
+<br>
+<button id="allarticles">CLick here to test DB query</button>
 
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script type="text/javascript" src="js/materialize.min.js"></script>
 <script type="text/javascript">
     $("#testinsert").on("click", function(event) {
         event.preventDefault();
@@ -29,6 +36,35 @@
         $.ajax({
             method: "GET",
             url: "/developer/test/scrape/" + testValue
+        })
+    })
+
+    $("#testcomment").on("click", function(event) {
+        var currentTime = moment().format("X");
+        event.preventDefault();
+        $.ajax( {
+            method: "POST",
+            url: "/developer/test/comment/",
+            data: {
+                username: "Guybrush Threepwood",
+                date: currentTime,
+                article: "Test Article",
+                textbody: "My name is Guybrush Threepwood, and I want to be a pirate!"
+            }
+        }).then(function(err, res) {
+            if (err) console.log(err);
+            console.log(res);
+        })
+    })
+
+    $("#allarticles").on("click", function(event) {
+        event.preventDefault();
+        $.ajax( {
+            method: "GET",
+            url: "/api/articles/all"
+        }).then(function(err, res) {
+            if (err) console.log(err);
+            console.log(res);
         })
     })
 </script>

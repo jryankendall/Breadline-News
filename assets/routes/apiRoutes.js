@@ -37,4 +37,10 @@ module.exports = function(app) {
             res.status(200);
         })
     })
+
+    app.get("/api/articles/all", function(req, res) {
+        headlines.all(function(response) {
+            res.send(response);
+        })
+    })
 }

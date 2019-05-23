@@ -6,7 +6,8 @@ var headlineSchema = new mongoose.Schema( {
     date: Date,
     url: String,
     subtitle: String,
-    articleBody: String
+    articleBody: String,
+    comments: Array
 });
 
 var Headline = mongoose.model("Headline", headlineSchema, "articles");
@@ -17,7 +18,8 @@ var testArticle = new Headline({
     url: "http:whatever",
     subtitle: "This is a test article",
     articleBody: "Lorem ipsum yadda yadda yadda",
-    source: "FFffff"
+    source: "FFffff",
+    comments: []
 });
 
 
@@ -34,16 +36,17 @@ var headlineControl = {
             url: headlineObj.url,
             subtitle: headlineObj.subtitle,
             articleBody: headlineObj.articleBody,
-            source: headlineObj.source
+            source: headlineObj.source,
+            comments: []
         });
         orm.addOne(insertedArticle, result => {cb(result);})
     },
     comment: function(commentObj, cb) {
         //Parse code here
         var newComment = {
-            user: commentObj.username,
+            username: commentObj.username,
             date: commentObj.date,
-            textbody: commentObj.textboy
+            textbody: commentObj.textbody
         };
         var articleName = commentObj.article;
 

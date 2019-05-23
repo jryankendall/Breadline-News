@@ -31,4 +31,16 @@ module.exports = function(app) {
         newsScrape.pullOnion(req.params.subject);
         res.send("Scrape Successful");
     })
+
+    app.post("/developer/test/comment/", (req, res) => {
+        console.log(req);
+
+        axios("/api/comment/", {
+            baseURL: "http://localhost:" + PORT,
+            method: "POST",
+            data: req.body
+        });
+
+        res.send("Comment added.");
+    })
 }
