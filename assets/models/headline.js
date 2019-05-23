@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 var headlineSchema = new mongoose.Schema( {
     title: String,
     date: Date,
+    added: Date,
     url: String,
     subtitle: String,
     articleBody: String,
@@ -15,6 +16,7 @@ var Headline = mongoose.model("Headline", headlineSchema, "articles");
 var testArticle = new Headline({
     title: "ACK",
     date: 69,
+    added: 1000000,
     url: "http:whatever",
     subtitle: "This is a test article",
     articleBody: "Lorem ipsum yadda yadda yadda",
@@ -33,6 +35,7 @@ var headlineControl = {
         var insertedArticle = new Headline({
             title: headlineObj.title,
             date: headlineObj.date,
+            added: headlineObj.added,
             url: headlineObj.url,
             subtitle: headlineObj.subtitle,
             articleBody: headlineObj.articleBody,

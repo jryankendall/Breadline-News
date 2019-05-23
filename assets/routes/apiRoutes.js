@@ -1,8 +1,10 @@
 var headlines = require("../models/headline");
+var moment = require("moment");
 
 const Headline = function(title, date, url, subtitle, articleBody, source){
     this.title = title;
     this.date = date;
+    this.added = moment().format("X");
     this.url = url;
     this.subtitle = subtitle;
     this.articleBody = articleBody;
