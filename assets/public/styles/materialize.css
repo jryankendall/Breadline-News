@@ -8091,5 +8091,10 @@ input[type=range]::-ms-thumb {
     margin-top: 1.2rem;
   }
 }
+.source-sub-controls {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: space-evenly;
+}
 
 /*# sourceMappingURL=materialize.css.map */

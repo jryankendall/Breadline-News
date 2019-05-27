@@ -38,6 +38,16 @@ function printSources(input) {
 
 }
 
+function retrieveArticles(source, cb) {
+    $.ajax( {
+        url: "/api/articles/" + source.source + "/" + source.category,
+        method: "GET"
+    }).then( function(res, err) {
+        if (err) console.log(err);
+        cb(res);
+    })
+}
+
 function initButtons() {
     $(".top-controls-col").on("click", ".sub-select-btn", function(event) {
         event.preventDefault();
@@ -51,10 +61,24 @@ function initButtons() {
         console.log(sourceValue);
         
         var sourceObj = findObject(sourcesArray, sourceValue);
+        $("#source-name-display").empty().text(sourceObj.title);
         for (let i = 0; i < sourceObj.category.length; i++) {
-            var newA = $("<a>").addClass("waves-effect waves-light btn").attr("value", sourceObj.category[i]).text(sourceObj.category[i]);
+            var newA = $("<a>").addClass("waves-effect waves-light btn category-btn").attr("value", sourceObj.category[i]).attr("source-value", sourceObj.value).text(sourceObj.category[i]);
             $(".source-sub-controls").append(newA);
         }
+    })
+
+    $(".source-sub-controls").on("click", ".category-btn", function(event) {
+        event.preventDefault();
+        var that = $(this);
+        var newsObject = {
+            source: that.attr("source-value"),
+            category: that.attr("value")
+        };
+        retrieveArticles(newsObject, (results) => {
+            console.log(results);
+            
+        })
     })
 }
 

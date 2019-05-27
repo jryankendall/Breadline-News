@@ -20,6 +20,14 @@ const orm = {
             if (err) console.log(err);
             cb(response);
         });
+    },
+
+    selectSome: function(mongoObj, conditions, cb) {
+        console.log(mongoObj);
+        mongoObj.find(conditions, function(err, results) {
+            if (err) console.log(err);
+            cb(results);
+        })
     }
 }
 

@@ -8,6 +8,8 @@ var headlineSchema = new mongoose.Schema( {
     url: String,
     subtitle: String,
     articleBody: String,
+    source: String,
+    category: String,
     comments: Array
 });
 
@@ -21,6 +23,7 @@ var testArticle = new Headline({
     subtitle: "This is a test article",
     articleBody: "Lorem ipsum yadda yadda yadda",
     source: "FFffff",
+    category: "Nothin",
     comments: []
 });
 
@@ -40,6 +43,7 @@ var headlineControl = {
             subtitle: headlineObj.subtitle,
             articleBody: headlineObj.articleBody,
             source: headlineObj.source,
+            category: headlineObj.category,
             comments: []
         });
         orm.addOne(insertedArticle, result => {cb(result);})
@@ -55,6 +59,14 @@ var headlineControl = {
 
         //At end:
         orm.addComment(newComment, Headline, articleName, result => {cb(result)});
+    },
+    some: function(source, category, cb) {
+        var conditions = {
+            source: { source },
+            category: { category }
+        };
+
+        orm.selectSome(Headline, conditions, result => {cb(result)});
     }
 }
 

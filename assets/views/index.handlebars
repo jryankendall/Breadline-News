@@ -9,8 +9,9 @@
         <br>
         <button id="allarticles">CLick here to test DB query</button>
 
-        <div class="source-sub-controls">
-            
+        <p>Select a Category Below after selecting a source from the left to retrieve results</p>
+        <div class="col s12 source-sub-controls">
+
         </div>
     </div>
 </div>
@@ -37,7 +38,8 @@
                 url: "http:whatever",
                 subtitle: "This is a test article",
                 articleBody: "Lorem ipsum yadda yadda yadda",
-                source: "My Mom"
+                source: "My Mom",
+                category: "politics"
             }
         }).then(function(err, res) {
             if (err) console.log(err);

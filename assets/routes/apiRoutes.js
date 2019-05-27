@@ -1,7 +1,7 @@
 var headlines = require("../models/headline");
 var moment = require("moment");
 
-const Headline = function(title, date, url, subtitle, articleBody, source){
+const Headline = function(title, date, url, subtitle, articleBody, source, category){
     this.title = title;
     this.date = date;
     this.added = moment().format("X");
@@ -9,6 +9,7 @@ const Headline = function(title, date, url, subtitle, articleBody, source){
     this.subtitle = subtitle;
     this.articleBody = articleBody;
     this.source = source;
+    this.category = category;
 };
 
 const UserComment = function(username = "Anonymous", date, article, textbody) {
@@ -23,7 +24,7 @@ module.exports = function(app) {
     app.post("/api/add/", function(req, res) {
         var data = req.body;
         console.log(data);
-        var newArticle = new Headline(data.title, data.date, data.url, data.subtitle, data.articleBody, data.source);
+        var newArticle = new Headline(data.title, data.date, data.url, data.subtitle, data.articleBody, data.source, data.category);
         headlines.insert(newArticle, function(response) {
             console.log(response);
             res.status(200);
@@ -42,6 +43,15 @@ module.exports = function(app) {
 
     app.get("/api/articles/all", function(req, res) {
         headlines.all(function(response) {
+            res.send(response);
+        })
+    })
+
+    app.get("/api/articles/:source/:category", function(req, res) {
+        var articleSource = req.params.source;
+        var articleCategory = req.params.category;
+        headlines.some(articleSource, articleCategory, function(response) {
+            console.log(response);
             res.send(response);
         })
     })
