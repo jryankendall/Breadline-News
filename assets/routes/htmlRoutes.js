@@ -5,7 +5,19 @@ const path = require("path");
 const newsScrape = require("./scraperRoute");
 
 const PORT = process.env.PORT || 3000;
-const sourceArray = ["Onion", "NY Times", "NPT"];
+const sourceArray = [{
+    title: "Onion",
+    category: ["politics", "sports", "local", "entertainment"],
+    value: "onion"
+}, {
+    title: "NY Times",
+    category: ["politics"],
+    value: "nytimes"
+}, {
+    title: "Nashville Public",
+    category: ["local"],
+    value: "nashvillepublic"
+}];
 
 module.exports = function(app) {
     app.get("/", (req, res) => {

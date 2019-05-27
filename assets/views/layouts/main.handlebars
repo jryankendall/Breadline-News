@@ -12,18 +12,20 @@
 </head>
 
 <body>
-    <div class="container page-content-container">
         <nav>
             <a href="#!" class="center brand-logo truncate">Current Source Here</a>
             <div class="topnav-div nav-wrapper">
                 <a href="#" data-target="mobile-navmenu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-                <ul class="hide-on-med-and-down left" id="sources-nav">
+                <ul class="hide-on-med-and-down left sources-nav">
 
                 </ul>
             </div>
         </nav>
-        {{{body}}}
-    </div>
+        <ul class="sidenav sources-nav" id="mobile-navmenu">
+        </ul>
+        <div class="container page-content-container">
+            {{{body}}}
+        </div>
 </body>
 
 </html>
