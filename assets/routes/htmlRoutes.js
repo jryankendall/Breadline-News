@@ -5,6 +5,7 @@ const path = require("path");
 const newsScrape = require("./scraperRoute");
 
 const PORT = process.env.PORT || 3000;
+const sourceArray = ["Onion", "NY Times", "NPT"];
 
 module.exports = function(app) {
     app.get("/", (req, res) => {
@@ -42,5 +43,9 @@ module.exports = function(app) {
         });
 
         res.send("Comment added.");
+    })
+
+    app.get("/api/sources/", (req, res) => {
+        res.send(sourceArray);
     })
 }
