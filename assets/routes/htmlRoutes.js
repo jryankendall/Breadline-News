@@ -7,7 +7,7 @@ const newsScrape = require("./scraperRoute");
 const PORT = process.env.PORT || 3000;
 const sourceArray = [{
     title: "Onion",
-    category: ["politics", "sports", "local", "entertainment"],
+    category: ["politics", "sports", "local", "entertainment", "ogn"],
     value: "onion"
 }, {
     title: "NY Times",
@@ -21,7 +21,6 @@ const sourceArray = [{
 
 module.exports = function(app) {
     app.get("/", (req, res) => {
-        console.log(req);
         res.render("index", {
             
         }
@@ -29,7 +28,6 @@ module.exports = function(app) {
     })
 
     app.post("/developer/test/insert", (req, res) => {
-        console.log(req);
         
         
         axios("/api/add/", {
@@ -40,9 +38,15 @@ module.exports = function(app) {
         res.send("Object added to database.");
     })
 
-    app.get("/developer/test/scrape/:subject", (req, res) => {
-        newsScrape.pullOnion(req.params.subject);
-        res.send("Scrape Successful");
+    app.get("/api/scrape/onion/:subject", (req, res) => {
+        newsScrape.pullOnion(req.params.subject, function(arr) {
+            axios("/api/add", {
+                baseURL: "http://localhost:" + PORT,
+                method: "POST",
+                data: arr
+            })
+        })
+        res.send("Attempted add to database.");
     })
 
     app.post("/developer/test/comment/", (req, res) => {

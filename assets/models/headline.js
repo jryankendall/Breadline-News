@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 var headlineSchema = new mongoose.Schema( {
     title: String,
+    aId: Number,
     date: Date,
     added: Date,
     url: String,
@@ -17,6 +18,7 @@ var Headline = mongoose.model("Headline", headlineSchema, "articles");
 
 var testArticle = new Headline({
     title: "ACK",
+    aId: 420,
     date: 69,
     added: 1000000,
     url: "http:whatever",
@@ -37,6 +39,7 @@ var headlineControl = {
     insert: function(headlineObj, cb) {
         var insertedArticle = new Headline({
             title: headlineObj.title,
+            aId: headlineObj.aId,
             date: headlineObj.date,
             added: headlineObj.added,
             url: headlineObj.url,
@@ -46,6 +49,8 @@ var headlineControl = {
             category: headlineObj.category,
             comments: []
         });
+        console.log(insertedArticle);
+        
         orm.addOne(insertedArticle, result => {cb(result);})
     },
     comment: function(commentObj, cb) {
@@ -62,8 +67,8 @@ var headlineControl = {
     },
     some: function(source, category, cb) {
         var conditions = {
-            source: { source },
-            category: { category }
+            source:  source,
+            category:  category 
         };
 
         orm.selectSome(Headline, conditions, result => {cb(result)});

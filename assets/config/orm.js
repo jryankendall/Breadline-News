@@ -16,16 +16,15 @@ const orm = {
 
     addComment: function(value, model, condition, cb) {
         console.log("Value: " + value + " Model: " + model + " condition: "+ condition);
-        model.updateOne({ title: condition.toString() }, { $push: { comments: value }}, function(err, response) {
+        model.updateOne({ id: condition }, { $push: { comments: value }}, function(err, response) {
             if (err) console.log(err);
             cb(response);
         });
     },
 
     selectSome: function(mongoObj, conditions, cb) {
-        console.log(mongoObj);
         mongoObj.find(conditions, function(err, results) {
-            if (err) console.log(err);
+/*             if (err) console.log(err); */
             cb(results);
         })
     }

@@ -40,7 +40,7 @@ function printSources(input) {
 
 function retrieveArticles(source, cb) {
     $.ajax( {
-        url: "/api/articles/" + source.source + "/" + source.category,
+        url: "/api/scrape/" + source.source + "/" + source.category,
         method: "GET"
     }).then( function(res, err) {
         if (err) console.log(err);

@@ -3,7 +3,7 @@ const axios = require("axios");
 const moment = require("moment");
 
 module.exports = {
-    pullOnion: function(subject) {
+    pullOnion: function(subject, cb) {
         axios.get("https://" + subject + ".theonion.com/").then(function(response) {
             var $ = cheerio.load(response.data);
             var results = [];
@@ -21,14 +21,14 @@ module.exports = {
                         link: articleLink,
                         date: articleDate,
                         subtitle: "",
-                        source: "The Onion",
+                        source: "onion",
                         articleBody: "",
-                        id: articleId
+                        category: subject,
+                        aId: articleId
                     });
                 }
             })
-
-            console.log(results);            
+            cb(results);
         })
         
     }
