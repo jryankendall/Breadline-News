@@ -13,6 +13,7 @@ module.exports = {
                 var articleTitle = articleDiv.children().children("h1").text();
                 var articleLink = articleDiv.children("a").attr("href");
                 var articleDate = articleDiv.next().children().children("time").attr("datetime");
+                var articleId = $(element).attr("data-id");
 
                 if (articleTitle) {
                     results.push({
@@ -21,7 +22,8 @@ module.exports = {
                         date: articleDate,
                         subtitle: "",
                         source: "The Onion",
-                        articleBody: ""
+                        articleBody: "",
+                        id: articleId
                     });
                 }
             })
