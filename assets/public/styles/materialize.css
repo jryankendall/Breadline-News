@@ -8097,4 +8097,12 @@ input[type=range]::-ms-thumb {
   justify-content: space-evenly;
 }
 
+.article-row {
+  border-top: solid 1px black;
+}
+
+.comment-body {
+  border-bottom: solid 1px black;
+}
+
 /*# sourceMappingURL=materialize.css.map */

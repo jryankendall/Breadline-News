@@ -9,15 +9,23 @@ const sourceArray = [{
     title: "Onion",
     category: ["politics", "sports", "local", "entertainment", "ogn"],
     value: "onion"
-}, {
+}, /* {
     title: "NY Times",
     category: ["politics"],
     value: "nytimes"
-}, {
-    title: "Nashville Public",
-    category: ["local"],
+},  */{
+    title: "Nashville Public Radio",
+    category: ["frontpage"],
     value: "nashvillepublic"
 }];
+
+function addToDB(arr) {
+    axios("/api/add", {
+        baseURL: "http://localhost:" + PORT,
+        method: "POST",
+        data: arr
+    })
+}
 
 module.exports = function(app) {
     app.get("/", (req, res) => {
@@ -46,13 +54,15 @@ module.exports = function(app) {
 
     app.get("/api/scrape/onion/:subject", (req, res) => {
         newsScrape.pullOnion(req.params.subject, function(arr) {
-            axios("/api/add", {
-                baseURL: "http://localhost:" + PORT,
-                method: "POST",
-                data: arr
-            })
+            addToDB(arr);
         })
         res.send("Attempted add to database.");
+    })
+
+    app.get("/api/scrape/nashvillepublic/:subject", (req, res) => {
+        newsScrape.pullNPR(req.params.subject, function(arr) {
+            addToDB(arr);
+        })
     })
 
     app.post("/developer/test/comment/", (req, res) => {

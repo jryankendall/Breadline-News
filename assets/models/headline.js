@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 var headlineSchema = new mongoose.Schema( {
     title: String,
-    aId: Number,
+    aId: String,
     date: Date,
     added: Date,
     url: String,

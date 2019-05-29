@@ -1,4 +1,5 @@
 var sourcesArray = [];
+var readyToRetrieve = true;
 
 const SourceObject = function(input) {
     this.title = input.title;
@@ -48,10 +49,6 @@ function retrieveArticles(source, cb) {
     })
 }
 
-function printArticles(arr) {
-
-}
-
 function initButtons() {
     $(".top-controls-col").on("click", ".sub-select-btn", function(event) {
         event.preventDefault();
@@ -79,34 +76,60 @@ function initButtons() {
             source: that.attr("source-value"),
             category: that.attr("value")
         };
-        retrieveArticles(newsObject, (results) => {
-            console.log(results);            
-        })
-        $(".main-content-column").empty();
-        setTimeout(function() {
-            $.ajax({
-                url: "/get/articles/" + newsObject.source + "/" + newsObject.category,
-                method: "GET"
-            }).then(function(res, err) {
-                if (err) console.log(err);
-                console.log(res);
-                for (let i = 0; i < res.length; i++) {
-                    let article = res[i];
-                    let titleDiv = $("<div class='headline-title-div'>").html("<h3 class='article-title'>" + article.title + "</h3><h4>" + article.date + "</h4>");
-                    let detailsDiv = $("<div class='headline-details-div'>").html("<p>Source: " + article.source + ", " + article.category + "</p><p>Full Article Link: </p><a target='_blank' href='" + article.url + "'>" + article.url + "</a>" );
-                    let commentsDiv = $("<div class='headline-comments-header'>").html("<h4>Comments: " + article.comments.length + "</h4>");
-                    let colDiv = $("<div class='col s12'>").append(titleDiv).append(detailsDiv).append(commentsDiv);
-                    let rowDiv = $("<div class='row'>").append(colDiv).attr("data-id", article.aId).attr("id", "article-row-" + i);
-                    $("#main-content-column").append(rowDiv);
-                }
+        if (readyToRetrieve){
+            readyToRetrieve = false;
+            retrieveArticles(newsObject, (results) => {
+                console.log(results);            
             })
-        }, 1000)
+            $(".main-content-column").empty().html("<p>Hang on, this might take a sec.</p>");
+            setTimeout(function() {
+                $.ajax({
+                    url: "/get/articles/" + newsObject.source + "/" + newsObject.category,
+                    method: "GET"
+                }).then(function(res, err) {
+                    if (err) console.log(err);
+                    console.log(res);
+                    $(".main-content-column").empty();
+                    for (let i = 0; i < res.length; i++) {
+                        let article = res[i];
+                        let titleDiv = $("<div class='headline-title-div'>").html("<h3 class='article-title'>" + article.title + "</h3><h4>" + article.date + "</h4>");
+                        let detailsDiv = $("<div class='headline-details-div'>").html("<p>Source: " + article.source + ", " + article.category + "</p><p>Full Article Link: </p><a target='_blank' href='" + article.url + "'>" + article.url + "</a>" );
+                        let commentsUL = $("<ul class='collapsible popout'>");
+                        let commentsLiHeader = $("<div class='collapsible-header'>").html("<p><i class='material-icons'>keyboard_arrow_down</i>Comments: " + article.comments.length + "</p>");
+                        let commentsLiBody = $("<div class='collapsible-body'>");
+                        let itemLi = $("<li>");
+                        for (let j = 0; j < article.comments.length; j++) {
+                            let commentBody = $("<div class='comment-body'>");
+                            let commentTop = $("<div class='comment-header'>");
+                            let commentText = $("<div class='comment-text'>");
+                            commentTop.html("<p>Author: <span>" + article.comments[j].username + "</span></p><p>Posted: <span>" + article.comments[j].date + "</span></p>");
+                            commentText.html("<p><i class='material-icons'>chat_bubble_outline</i><span>" + article.comments[j].textbody + "</span></p>");
+                            commentBody.append(commentTop).append(commentText);
+                            commentsLiBody.append(commentBody);
+                        }
+                        let inputField = $("<div class='input-field'>")
+                        let newForm = $("<form>").addClass("comment-form").attr("data-id", article.aId).attr("id", "comment-" + i + "-form");
+                        let nameInput = $("<input type='text' name='username-" + i + "'>");
+                        let textInput = $("<textarea id='comment-" + i + "-body' maxlength='255'>")
+                        itemLi.append(commentsLiHeader).append(commentsLiBody);
+                        commentsUL.append(itemLi);
+                        let colDiv = $("<div class='col s12'>").append(titleDiv).append(detailsDiv).append(commentsUL);
+                        let rowDiv = $("<div class='row article-row'>").append(colDiv).attr("data-id", article.aId).attr("id", "article-row-" + i);
+                        $("#main-content-column").append(rowDiv);
+                    }
+                    readyToRetrieve = true;
+                })
+            }, 1000)
+        } else {
+            return null;
+        }
     })
 }
 
 //Functions to execute on page load
 $(function() {
     $(".sidenav").sidenav();
+    $('.collapsible').collapsible();
     //Pulls the list of sources from the back end
     pullSources("/api/sources/", (response) => { console.log(response); printSources(response) });
     initButtons();
