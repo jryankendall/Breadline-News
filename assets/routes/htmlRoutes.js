@@ -77,6 +77,16 @@ module.exports = function(app) {
         res.send("Comment added.");
     })
 
+    app.post("/comment/", (req, res) => {
+        axios("/api/comment", {
+            baseURL: "http://localhost:" + PORT,
+            method: "POST",
+            data: req.body
+        });
+
+        res.send("Commented. Hopefully.");
+    })
+
     app.get("/api/sources/", (req, res) => {
         res.send(sourceArray);
     })

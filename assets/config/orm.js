@@ -16,7 +16,7 @@ const orm = {
 
     addComment: function(value, model, condition, cb) {
         console.log("Value: " + value + " Model: " + model + " condition: "+ condition);
-        model.updateOne({ id: condition }, { $push: { comments: value }}, function(err, response) {
+        model.updateOne({ aId: condition }, { $push: { comments: value }}, function(err, response) {
             if (err) console.log(err);
             cb(response);
         });

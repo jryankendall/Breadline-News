@@ -94,9 +94,9 @@ function initButtons() {
                         let article = res[i];
                         let titleDiv = $("<div class='headline-title-div'>").html("<h3 class='article-title'>" + article.title + "</h3><h4>" + article.date + "</h4>");
                         let detailsDiv = $("<div class='headline-details-div'>").html("<p>Source: " + article.source + ", " + article.category + "</p><p>Full Article Link: </p><a target='_blank' href='" + article.url + "'>" + article.url + "</a>" );
-                        let commentsUL = $("<ul class='collapsible popout'>");
-                        let commentsLiHeader = $("<div class='collapsible-header'>").html("<p><i class='material-icons'>keyboard_arrow_down</i>Comments: " + article.comments.length + "</p>");
-                        let commentsLiBody = $("<div class='collapsible-body'>");
+                        let commentsUL = $("<ul class='collapsible col s12 popout'>");
+                        let commentsLiHeader = $("<div class='collapsible-header'>").html("<p><i class='material-icons'>keyboard_arrow_down</i>Comments: " + article.comments.length + "; Most Recent at Top</p>");
+                        let commentsLiBody = $("<div class='collapsible-body'  id='commentbox-" + i + "'>");
                         let itemLi = $("<li>");
                         for (let j = 0; j < article.comments.length; j++) {
                             let commentBody = $("<div class='comment-body'>");
@@ -105,31 +105,69 @@ function initButtons() {
                             commentTop.html("<p>Author: <span>" + article.comments[j].username + "</span></p><p>Posted: <span>" + article.comments[j].date + "</span></p>");
                             commentText.html("<p><i class='material-icons'>chat_bubble_outline</i><span>" + article.comments[j].textbody + "</span></p>");
                             commentBody.append(commentTop).append(commentText);
-                            commentsLiBody.append(commentBody);
+                            commentsLiBody.prepend(commentBody);
                         }
-                        let inputField = $("<div class='input-field'>")
-                        let newForm = $("<form>").addClass("comment-form").attr("data-id", article.aId).attr("id", "comment-" + i + "-form");
-                        let nameInput = $("<input type='text' name='username-" + i + "'>");
-                        let textInput = $("<textarea id='comment-" + i + "-body' maxlength='255'>")
+                        let newForm = $("<form>").addClass("comment-form col s8").attr("data-id", article.aId).attr("id", "comment-" + i + "-form");
+                        let nameInput = $("<input type='text' id='username-" + i + "'>").addClass("comment-username-input");
+                        let textInput = $("<textarea id='comment-" + i + "-body' maxlength='255' required>").addClass("comment-text-input");
+                        let inputField1 = $("<div class='input-field'>").append(nameInput).append("<label for='username-" + i + "'>Username (optional)</label>");
+                        let inputField2 = $("<div class='input-field'>").append(textInput).append("<label for='comment-" + i + "-body'>Comment (max 255 characters)</label>");
+                        let submitButton = $("<a class='waves-effect waves-light btn submit-comment-btn' value='" + article.aId + "' id='comment-" + i + "-submit'>Post Comment</a>").attr("value", i);
+                        newForm.append(inputField1).append(inputField2).append(submitButton);
                         itemLi.append(commentsLiHeader).append(commentsLiBody);
                         commentsUL.append(itemLi);
+                        detailsDiv.append(newForm);
                         let colDiv = $("<div class='col s12'>").append(titleDiv).append(detailsDiv).append(commentsUL);
-                        let rowDiv = $("<div class='row article-row'>").append(colDiv).attr("data-id", article.aId).attr("id", "article-row-" + i);
+                        let rowDiv = $("<div class='row article-row'>").append(colDiv).attr("data-id", article.aId).attr("id", "article-row-" + i).attr("value", i);
                         $("#main-content-column").append(rowDiv);
                     }
                     readyToRetrieve = true;
+                    $('.collapsible').collapsible();
                 })
             }, 1000)
         } else {
             return null;
         }
     })
+
+    $(".main-content-column").on("click", ".submit-comment-btn", function(event) {
+        event.preventDefault();
+        var submitBtn = $(this);
+        console.log(submitBtn);
+        
+        var headlineNum = submitBtn.attr("value");
+        var headlineId = $("#article-row-" + headlineNum).attr("data-id");
+        var commentUser = $("#username-" + headlineNum).val().trim() || "Anonymous";
+        var commentBody = $("#comment-" + headlineNum + "-body").val().trim() || "I gots nothin' ta say!";
+        var currentTime = moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+        $.ajax( {
+            url: "/comment/",
+            method: "POST",
+            data: {
+                username: commentUser,
+                date: currentTime,
+                textbody: commentBody,
+                article: headlineId
+            }
+        }).then(function(res, err) {
+            if (err) console.log(err);
+            console.log(res);
+            let commentMBody = $("<div class='comment-body'>");
+            let commentTop = $("<div class='comment-header'>");
+            let commentText = $("<div class='comment-text'>");
+            commentTop.html("<p>Author: <span>" + commentUser + "</span></p><p>Posted: <span>" + currentTime + "</span></p>");
+            commentText.html("<p><i class='material-icons'>chat_bubble_outline</i><span>" + commentBody + "</span></p>");
+            commentMBody.append(commentTop).append(commentText);
+            $("#commentbox-" + headlineNum).prepend(commentMBody);  
+            $(".comment-username-input").val("");
+            $(".comment-text-input").val("");
+        })
+    })
 }
 
 //Functions to execute on page load
 $(function() {
     $(".sidenav").sidenav();
-    $('.collapsible').collapsible();
     //Pulls the list of sources from the back end
     pullSources("/api/sources/", (response) => { console.log(response); printSources(response) });
     initButtons();
