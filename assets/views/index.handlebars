@@ -1,14 +1,6 @@
 <div class="row top-controls-row">
     <div class="col s12 top-controls-col">
-        <button id="testinsert">Click Here To Test Insert</button>
-        <br>
-        <input id="scrapetest-input">
-        <button id="testscrape">Click to Test Onion Scraper</button>
-        <br>
-        <button id="testcomment">Click Here to Test Comment Add, then check the MongoDB</button>
-        <br>
         <button id="allarticles">CLick here to test DB query</button>
-
         <p>Select a Category Below after selecting a source from the left to retrieve results</p>
         <div class="col s12 source-sub-controls">
 
@@ -29,54 +21,6 @@
 <script type="text/javascript" src="js/materialize.min.js"></script>
 <script type="text/javascript" src="js/logic.js"></script>
 <script type="text/javascript">
-    $("#testinsert").on("click", function(event) {
-        event.preventDefault();
-        $.ajax({
-            method: "POST",
-            url: "/developer/test/insert",
-            data: {
-                title: "ACK",
-                id: 420,
-                date: 69,
-                url: "http:whatever",
-                subtitle: "This is a test article",
-                articleBody: "Lorem ipsum yadda yadda yadda",
-                source: "My Mom",
-                category: "politics"
-            }
-        }).then(function(err, res) {
-            if (err) console.log(err);
-            console.log(res);
-        })
-    })
-
-    $("#testscrape").on("click", function(event) {
-        var testValue = $("#scrapetest-input").val();
-        event.preventDefault();
-        $.ajax({
-            method: "GET",
-            url: "/developer/test/scrape/" + testValue
-        })
-    })
-
-    $("#testcomment").on("click", function(event) {
-        var currentTime = moment().format("X");
-        event.preventDefault();
-        $.ajax( {
-            method: "POST",
-            url: "/developer/test/comment/",
-            data: {
-                username: "Guybrush Threepwood",
-                date: currentTime,
-                article: 420,
-                textbody: "My name is Guybrush Threepwood, and I want to be a pirate!"
-            }
-        }).then(function(err, res) {
-            if (err) console.log(err);
-            console.log(res);
-        })
-    })
-
     $("#allarticles").on("click", function(event) {
         event.preventDefault();
         $.ajax( {
