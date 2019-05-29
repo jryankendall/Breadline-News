@@ -80,7 +80,9 @@ module.exports = function(app) {
         var articleSource = req.params.source;
         var articleCategory = req.params.category;
         headlines.some(articleSource, articleCategory, function(response) {
-            res.send(response);
+
+            console.log(response);
+            res.json(response);
         })
     })
 }

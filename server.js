@@ -22,7 +22,8 @@ app.set("views", path.join(__dirname, "/assets/views"));
 app.engine(
     "handlebars",
     exphbs({
-        defaultLayout: "main"
+        defaultLayout: "main",
+        partialsDir: __dirname + "/assets/views/partials"
     })
 );
 app.set("view engine", "handlebars");

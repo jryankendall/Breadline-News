@@ -48,6 +48,10 @@ function retrieveArticles(source, cb) {
     })
 }
 
+function printArticles(arr) {
+
+}
+
 function initButtons() {
     $(".top-controls-col").on("click", ".sub-select-btn", function(event) {
         event.preventDefault();
@@ -76,9 +80,27 @@ function initButtons() {
             category: that.attr("value")
         };
         retrieveArticles(newsObject, (results) => {
-            console.log(results);
-            
+            console.log(results);            
         })
+        $(".main-content-column").empty();
+        setTimeout(function() {
+            $.ajax({
+                url: "/get/articles/" + newsObject.source + "/" + newsObject.category,
+                method: "GET"
+            }).then(function(res, err) {
+                if (err) console.log(err);
+                console.log(res);
+                for (let i = 0; i < res.length; i++) {
+                    let article = res[i];
+                    let titleDiv = $("<div class='headline-title-div'>").html("<h3 class='article-title'>" + article.title + "</h3><h4>" + article.date + "</h4>");
+                    let detailsDiv = $("<div class='headline-details-div'>").html("<p>Source: " + article.source + ", " + article.category + "</p><p>Full Article Link: </p><a target='_blank' href='" + article.url + "'>" + article.url + "</a>" );
+                    let commentsDiv = $("<div class='headline-comments-header'>").html("<h4>Comments: " + article.comments.length + "</h4>");
+                    let colDiv = $("<div class='col s12'>").append(titleDiv).append(detailsDiv).append(commentsDiv);
+                    let rowDiv = $("<div class='row'>").append(colDiv).attr("data-id", article.aId).attr("id", "article-row-" + i);
+                    $("#main-content-column").append(rowDiv);
+                }
+            })
+        }, 1000)
     })
 }
 

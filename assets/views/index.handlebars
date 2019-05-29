@@ -17,8 +17,10 @@
 </div>
 
 <div class="row main-content-row">
-    <div class="col s12 main-content-column">
-
+    <div class="col s12 main-content-column" id="main-content-column">
+        {{#each headline}}
+            {{> headline/headline-block}}
+        {{/each}}
     </div>
 </div>
 

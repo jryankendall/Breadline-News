@@ -21,10 +21,16 @@ const sourceArray = [{
 
 module.exports = function(app) {
     app.get("/", (req, res) => {
-        res.render("index", {
-            
-        }
-        )
+        res.render("index");
+    })
+
+    app.get("/get/articles/:source/:category", (req, res) => {
+        axios("/api/articles/" + req.params.source + "/" + req.params.category, {
+            baseURL: "http://localhost:" + PORT,
+            method: "GET"
+        }).then(function(response) {
+            res.json(response.data)
+        })
     })
 
     app.post("/developer/test/insert", (req, res) => {

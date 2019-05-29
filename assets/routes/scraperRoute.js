@@ -18,7 +18,7 @@ module.exports = {
                 if (articleTitle) {
                     results.push({
                         title: articleTitle,
-                        link: articleLink,
+                        url: articleLink,
                         date: articleDate,
                         subtitle: "",
                         source: "onion",
