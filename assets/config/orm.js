@@ -23,7 +23,11 @@ const orm = {
     },
 
     selectSome: function(mongoObj, conditions, cb) {
-        mongoObj.find(conditions, function(err, results) {
+        mongoObj.find(conditions, [], {
+            sort: {
+                date: -1
+            }
+        }, function(err, results) {
 /*             if (err) console.log(err); */
             cb(results);
         })

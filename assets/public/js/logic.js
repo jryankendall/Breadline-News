@@ -1,6 +1,24 @@
 var sourcesArray = [];
 var readyToRetrieve = true;
 
+
+//These ensure user input doesn't inject any dangerous stuff
+var entityMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
+};
+function escapeHtml (string) {
+    return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+      return entityMap[s];
+    });
+}
+
 const SourceObject = function(input) {
     this.title = input.title;
     this.category = input.category;
@@ -92,18 +110,20 @@ function initButtons() {
                     $(".main-content-column").empty();
                     for (let i = 0; i < res.length; i++) {
                         let article = res[i];
-                        let titleDiv = $("<div class='headline-title-div'>").html("<h3 class='article-title'>" + article.title + "</h3><h4>" + article.date + "</h4>");
+                        let dateMoment = moment(article.date, "YYYY-MM-DDTHH:mm:ss.SSSZ");
+                        let titleDiv = $("<div class='headline-title-div'>").html("<h3 class='article-title'>" + article.title + "</h3><h4>" + dateMoment.format("MMMM Do, YYYY, h:mm A z") + "</h4>");
                         let detailsDiv = $("<div class='headline-details-div'>").html("<p>Source: " + article.source + ", " + article.category + "</p><p>Full Article Link: </p><a target='_blank' href='" + article.url + "'>" + article.url + "</a>" );
                         let commentsUL = $("<ul class='collapsible col s12 popout'>");
                         let commentsLiHeader = $("<div class='collapsible-header'>").html("<p><i class='material-icons'>keyboard_arrow_down</i>Comments: " + article.comments.length + "; Most Recent at Top</p>");
                         let commentsLiBody = $("<div class='collapsible-body'  id='commentbox-" + i + "'>");
                         let itemLi = $("<li>");
                         for (let j = 0; j < article.comments.length; j++) {
+                            let commentMoment = moment(article.comments[j].date, "YYYY-MM-DDTHH:mm:ss.SSSZ")
                             let commentBody = $("<div class='comment-body'>");
                             let commentTop = $("<div class='comment-header'>");
                             let commentText = $("<div class='comment-text'>");
-                            commentTop.html("<p>Author: <span>" + article.comments[j].username + "</span></p><p>Posted: <span>" + article.comments[j].date + "</span></p>");
-                            commentText.html("<p><i class='material-icons'>chat_bubble_outline</i><span>" + article.comments[j].textbody + "</span></p>");
+                            commentTop.html("<p>Author: <span>" + article.comments[j].username + "</span></p><p>Posted: <span>" + commentMoment.format("MM-DD-YYYY, h:mm:ss A") + "</span></p>");
+                            commentText.html("<p><i class='material-icons'>chat_bubble_outline</i> : <span>" + article.comments[j].textbody + "</span></p>");
                             commentBody.append(commentTop).append(commentText);
                             commentsLiBody.prepend(commentBody);
                         }
@@ -124,7 +144,7 @@ function initButtons() {
                     readyToRetrieve = true;
                     $('.collapsible').collapsible();
                 })
-            }, 1000)
+            }, 1500)
         } else {
             return null;
         }
@@ -137,8 +157,8 @@ function initButtons() {
         
         var headlineNum = submitBtn.attr("value");
         var headlineId = $("#article-row-" + headlineNum).attr("data-id");
-        var commentUser = $("#username-" + headlineNum).val().trim() || "Anonymous";
-        var commentBody = $("#comment-" + headlineNum + "-body").val().trim() || "I gots nothin' ta say!";
+        var commentUser = escapeHtml($("#username-" + headlineNum).val().trim()) || "Anonymous";
+        var commentBody = escapeHtml($("#comment-" + headlineNum + "-body").val().trim()) || "I gots nothin' ta say!";
         var currentTime = moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ");
         $.ajax( {
             url: "/comment/",
@@ -155,8 +175,8 @@ function initButtons() {
             let commentMBody = $("<div class='comment-body'>");
             let commentTop = $("<div class='comment-header'>");
             let commentText = $("<div class='comment-text'>");
-            commentTop.html("<p>Author: <span>" + commentUser + "</span></p><p>Posted: <span>" + currentTime + "</span></p>");
-            commentText.html("<p><i class='material-icons'>chat_bubble_outline</i><span>" + commentBody + "</span></p>");
+            commentTop.html("<p>Author: <span>" + commentUser + "</span></p><p>Posted: <span>" + moment(currentTime).format("MM-DD-YYYY, h:mm:ss A") + "</span></p>");
+            commentText.html("<p><i class='material-icons'>chat_bubble_outline</i> : <span>" + commentBody + "</span></p>");
             commentMBody.append(commentTop).append(commentText);
             $("#commentbox-" + headlineNum).prepend(commentMBody);  
             $(".comment-username-input").val("");
