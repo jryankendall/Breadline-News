@@ -81,8 +81,23 @@ function initButtons() {
         
         var sourceObj = findObject(sourcesArray, sourceValue);
         $("#source-name-display").empty().text(sourceObj.title);
+        $("nav").removeClass("blue red green");
         for (let i = 0; i < sourceObj.category.length; i++) {
             var newA = $("<a>").addClass("waves-effect waves-light btn category-btn").attr("value", sourceObj.category[i]).attr("source-value", sourceObj.value).text(sourceObj.category[i]);
+            switch(sourceObj.title) {
+                case "Onion":
+                    $("nav").addClass("green");
+                    newA.addClass("green");
+                    break;
+                case "Nashville Public Radio":
+                    $("nav").addClass("red");
+                    newA.addClass("red");
+                    break;
+                default:
+                    newA.addClass("blue");
+                    $("nav").addClass("blue");
+                    break;
+            }
             $(".source-sub-controls").append(newA);
         }
     })
